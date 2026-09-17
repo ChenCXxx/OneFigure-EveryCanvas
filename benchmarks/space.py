@@ -36,7 +36,7 @@ except ImportError:
     )
 
 # ====================================
-# Contants
+# Constants
 # ====================================
 
 METRICS_VERSION = 1
@@ -48,13 +48,15 @@ REFERENCE_DIR = Path(__file__).resolve().parent / "space_reference"
 
 SEVERE_ERROR_REFERENCES = {
     "compression.png": (
-        "嚴重錯誤一：視覺平衡中文字壓縮參考圖。"
-        "文字擠壓後變得有一點細長，且排版與細節仍與原圖相同，"
-        "這種情況屬於壓縮流程圖錯誤。"
+        "Severe error 1: text-compression reference image for visual "
+        "balance. The text becomes slightly elongated after being "
+        "squeezed, while the layout and details otherwise match the "
+        "original image. This is a compressed-flowchart error."
     ),
     "unclear_arrow_flow_reference.png": (
-        "流向安排不好參考圖：箭頭流向不統一，且混雜意義不明、"
-        "難以判斷連接目標的邊或箭頭。"
+        "Poorly arranged flow reference image: arrow flow direction is "
+        "inconsistent, mixed with edges or arrows whose meaning is "
+        "unclear or whose connection target is hard to determine."
     ),
 }
 

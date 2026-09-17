@@ -1,5 +1,5 @@
-請比較這兩張流程圖的 relationship 是否一致。
-第一張是 reference，第二張是 candidate。
-請忽略排版、大小、位置、顏色差異，只檢查關係是否一致。
-如果箭頭或連線看起來不夠清楚，請保守判斷，不要因為不確定的細節就判成錯誤。
-若不一致，請用中文列出具體哪一些 relationship 不同。
+Please compare whether the relationships in these two flowcharts are consistent.
+The first image is the reference, the second is the candidate.
+Ignore differences in layout, size, position, and color — only check whether the relationships are consistent.
+If an arrow or connection looks unclear, judge conservatively — do not mark it as incorrect just because of an uncertain detail.
+If they are inconsistent, list in English which specific relationships differ.
