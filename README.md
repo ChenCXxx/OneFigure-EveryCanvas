@@ -1,11 +1,11 @@
-# Flowchart Benchmark 使用說明
+# Flowchart Benchmark Usage Guide
 
-這份文件提供 benchmark 的環境設定、輸入格式、執行方式、輸出格式與
-benchmark 選擇方式。
+This document covers environment setup, input format, how to run the
+benchmark, output format, and how to select which benchmarks to run.
 
-## 1. 環境設定
+## 1. Environment Setup
 
-建議使用 Python 3.12 與 `uv`。
+Python 3.12 with `uv` is recommended.
 
 ### Windows
 
@@ -29,7 +29,7 @@ uv sync --extra space
 cp .env.example .env
 ```
 
-在 `.env` 中設定要使用的模型服務，例如 Gemini：
+In `.env`, configure which model provider to use, for example Gemini:
 
 ```dotenv
 LLM_PROVIDER=gemini
@@ -37,11 +37,11 @@ LLM_MODEL=gemini-2.5-pro
 GEMINI_API_KEY=your-api-key
 ```
 
-請勿提交 `.env` 或 API key。
+Do not commit `.env` or your API key.
 
-## 2. 輸入檔案架構
+## 2. Input File Structure
 
-輸入資料放在 `benchmark/inputs/` 底下，每個 case 使用一個資料夾：
+Input data goes under `benchmark/inputs/`, with one folder per case:
 
 ```text
 benchmark/
@@ -62,17 +62,19 @@ benchmark/
       └─ paperbanana.png
 ```
 
-規則：
+Rules:
 
-- 資料夾名稱格式為 `<case_id>_<width>_<height>`。
-- `reference.png`、`reference.jpg`、`reference.jpeg`、`reference.webp` 或
-  `reference.bmp` 是參考圖片。
-- 其他 `.png`、`.jpg`、`.jpeg`、`.webp`、`.bmp` 圖片會被視為 candidate。
-- candidate 的檔名會成為 method 名稱，例如 `ours.png` 會得到 `ours`。
+- Folder names follow the format `<case_id>_<width>_<height>`.
+- `reference.png`, `reference.jpg`, `reference.jpeg`, `reference.webp`, or
+  `reference.bmp` is the reference image.
+- Any other `.png`, `.jpg`, `.jpeg`, `.webp`, `.bmp` image is treated as a
+  candidate.
+- A candidate's filename becomes its method name, e.g. `ours.png` becomes
+  `ours`.
 
-## 3. 執行 benchmark
+## 3. Running the Benchmark
 
-在 `benchmark/` 目錄執行：
+Run from the `benchmark/` directory:
 
 ```powershell
 uv run python pipeline.py `
@@ -81,7 +83,7 @@ uv run python pipeline.py `
     --name run1
 ```
 
-Linux：
+Linux:
 
 ```bash
 uv run python pipeline.py \
@@ -90,42 +92,42 @@ uv run python pipeline.py \
     --name run1
 ```
 
-如果沒有指定 `--benchmarks`，預設執行：
+If `--benchmarks` is not specified, the following run by default:
 
 ```text
 style → space → relationship → hallucination
 ```
 
-## 4. 選擇要執行的 benchmark
+## 4. Selecting Which Benchmarks to Run
 
-可使用 `--benchmarks` 選擇一個或多個 benchmark。
+Use `--benchmarks` to select one or more benchmarks.
 
-只執行 Style：
+Run only Style:
 
 ```powershell
 uv run python pipeline.py --benchmarks style
 ```
 
-執行 Style 與 Space：
+Run Style and Space:
 
 ```powershell
 uv run python pipeline.py --benchmarks style space
 ```
 
-執行 Relationship 與 Hallucination：
+Run Relationship and Hallucination:
 
 ```powershell
 uv run python pipeline.py --benchmarks relationship hallucination
 ```
 
-執行全部四個：
+Run all four:
 
 ```powershell
 uv run python pipeline.py `
     --benchmarks style space relationship hallucination
 ```
 
-可使用的 benchmark 名稱：
+Available benchmark names:
 
 ```text
 style
@@ -134,16 +136,16 @@ relationship
 hallucination
 ```
 
-## 5. 重用 Space metrics
+## 5. Reusing Space Metrics
 
-第一次執行：
+First run:
 
 ```powershell
 uv run python pipeline.py `
     --name run1
 ```
 
-之後的執行可以重用 `run1` 中仍然相同的 Space metrics：
+A later run can reuse Space metrics from `run1` that are still unchanged:
 
 ```powershell
 uv run python pipeline.py `
@@ -152,10 +154,11 @@ uv run python pipeline.py `
     --previous-root .\outputs\run1
 ```
 
-只有在 case、method、reference 圖片與 candidate 圖片都相同時才會重用。
-如果圖片有變更，對應的 metrics 會重新計算。
+Metrics are only reused when the case, method, reference image, and
+candidate image are all identical. If an image has changed, its metrics are
+recomputed.
 
-## 6. Output 結構
+## 6. Output Structure
 
 ```text
 benchmark/
@@ -177,15 +180,16 @@ benchmark/
             └─ result.json
 ```
 
-`run.json` 是整次執行的摘要，包含：
+`run.json` is a summary of the entire run, containing:
 
 - run id
-- 執行的 benchmark
-- provider 與 model
-- 執行狀態
-- 每個 case 的結果
+- benchmarks executed
+- provider and model
+- run status
+- results for each case
 
-`space/metrics/` 存放 Space 的圖片分析結果，
-`space/artifacts/` 存放空白區域的視覺化圖片。
+`space/metrics/` stores Space's image analysis results, and
+`space/artifacts/` stores visualizations of blank regions.
 
-執行完成後，terminal 會顯示目前的 case、benchmark 與 method 進度。
+While running, the terminal shows progress for the current case, benchmark,
+and method.
