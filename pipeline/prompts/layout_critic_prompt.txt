@@ -1,0 +1,10 @@
+﻿以下是 mxGraphModel XML：
+{xml_text}
+
+程式檢查產生的 reasons：
+{reasons}
+
+原始 input.xml 中的 decoration attachment 基準（只作為 suggestion 參考，不是硬性 relationship）：
+{decorations}
+
+請特別留意這些 annotation / bracket 是否仍在原本附著對象附近、是否仍框對原本那組 box 或 group；若偏掉，請在 suggestion 說明。

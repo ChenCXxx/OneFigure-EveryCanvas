@@ -1,0 +1,22 @@
+[project]
+name = "flowchart-pipeline"
+version = "0.1.0"
+description = "Flowchart generation pipeline"
+readme = "README copy.md"
+requires-python = "==3.12.*"
+dependencies = [
+    "google-genai>=1.0",
+    "numpy>=1.26,<3",
+    "openai>=1.0",
+    "pillow>=10",
+    "python-dotenv>=1.0",
+    "torch>=2.0",
+]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu128" }
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
