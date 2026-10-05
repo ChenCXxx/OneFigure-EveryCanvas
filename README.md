@@ -298,3 +298,4 @@ If you find our work useful, please consider citing:
 ```
 
 ## License
+This project is licensed under the [MIT License](LICENSE).
