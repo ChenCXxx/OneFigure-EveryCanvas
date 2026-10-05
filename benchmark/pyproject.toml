@@ -26,3 +26,19 @@ dev = [
     "pytest>=8",
 ]
 
+[tool.setuptools]
+py-modules = ["pipeline", "llm", "schemas", "utils", "config"]
+
+[tool.setuptools.packages.find]
+include = ["benchmarks*"]
+exclude = ["inputs*", "outputs*", "prompts*", "tests*"]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu128" }
+torchvision = { index = "pytorch-cu128" }
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+

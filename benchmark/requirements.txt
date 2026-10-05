@@ -1,0 +1,10 @@
+numpy>=1.26,<2
+Pillow>=10,<12
+openai>=1.0
+google-genai>=1.0
+
+# Required by the Space benchmark.
+torch>=2.0
+torchvision>=0.15
+lpips>=0.1.4
+easyocr>=1.7

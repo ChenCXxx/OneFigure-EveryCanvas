@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from contextlib import nullcontext
 from pathlib import Path
 
 from PIL import Image
@@ -94,39 +95,45 @@ def run_sam3_inference(
         if original_get_coords is not None:
             TransformerDecoder._get_coords = staticmethod(original_get_coords)
     processor = Sam3Processor(model, device=device)
-    state = processor.set_image(image)
 
     detections: list[dict[str, object]] = []
     try:
-        for prompt in prompts:
-            result = processor.set_text_prompt(state=state, prompt=prompt)
-            boxes = result["boxes"]
-            scores = result["scores"]
-            if isinstance(boxes, torch.Tensor):
-                boxes = boxes.detach().cpu().numpy()
-            if isinstance(scores, torch.Tensor):
-                scores = scores.detach().cpu().numpy()
+        autocast = (
+            torch.autocast(device_type="cuda", dtype=torch.bfloat16)
+            if device == "cuda"
+            else nullcontext()
+        )
+        with autocast:
+            state = processor.set_image(image)
+            for prompt in prompts:
+                result = processor.set_text_prompt(state=state, prompt=prompt)
+                boxes = result["boxes"]
+                scores = result["scores"]
+                if isinstance(boxes, torch.Tensor):
+                    boxes = boxes.detach().float().cpu().numpy()
+                if isinstance(scores, torch.Tensor):
+                    scores = scores.detach().float().cpu().numpy()
 
-            count = 0
-            for box, score in zip(boxes, scores):
-                score = float(score)
-                if score < min_score:
-                    continue
-                x1, y1, x2, y2 = map(int, box[:4])
-                if x2 <= x1 or y2 <= y1:
-                    continue
-                detections.append(
-                    {
-                        "x1": x1,
-                        "y1": y1,
-                        "x2": x2,
-                        "y2": y2,
-                        "score": score,
-                        "prompt": prompt,
-                    }
-                )
-                count += 1
-            print(f"[bbox] prompt={prompt!r} detections={count}", flush=True)
+                count = 0
+                for box, score in zip(boxes, scores):
+                    score = float(score)
+                    if score < min_score:
+                        continue
+                    x1, y1, x2, y2 = map(int, box[:4])
+                    if x2 <= x1 or y2 <= y1:
+                        continue
+                    detections.append(
+                        {
+                            "x1": x1,
+                            "y1": y1,
+                            "x2": x2,
+                            "y2": y2,
+                            "score": score,
+                            "prompt": prompt,
+                        }
+                    )
+                    count += 1
+                print(f"[bbox] prompt={prompt!r} detections={count}", flush=True)
     finally:
         del processor, model
         if torch.cuda.is_available():
