@@ -1,9 +1,11 @@
 # One Figure, Every Canvas
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.12](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
 
-## Description
+## 📌 Description
 
 
-## Repository Structure
+## 📂 Repository Structure
 
 ```text
 .
@@ -23,7 +25,7 @@
 └── uv.lock
 ```
 
-## Getting Started
+## 🚀 Getting Started
 
 ### Installation
 
@@ -282,10 +284,10 @@ uv run python pipeline.py \
 - `--benchmarks`: one or more of `style`, `space`, `relationship`, and
   `hallucination`. If omitted, all four are run.
 
-## Results
+## 📊 Results
 
 
-## Citation
+## 📚 Citation
 
 If you find our work useful, please consider citing:
 
@@ -297,5 +299,5 @@ If you find our work useful, please consider citing:
 }
 ```
 
-## License
+## 📄 License
 This project is licensed under the [MIT License](LICENSE).
