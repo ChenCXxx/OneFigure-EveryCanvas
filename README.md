@@ -20,7 +20,6 @@
 │   ├── outputs/
 │   ├── benchmarks/
 │   └── prompts/
-├── requirements.txt
 ├── pyproject.toml
 └── uv.lock
 ```
@@ -35,14 +34,6 @@ cd OneFigure-EveryCanvas
 
 uv venv --python 3.12
 uv sync --all-packages --all-extras
-```
-
-If `uv` is not available, use `venv` and `pip` instead:
-
-```bash
-python -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
-python -m pip install -r requirements.txt
 ```
 
 Create the local environment files and add the required API keys:
@@ -121,8 +112,8 @@ official SAM3 repository at `pipeline/sam3/`:
 ```bash
 cd pipeline
 git clone https://github.com/facebookresearch/sam3.git
-python -m pip install einops ninja pycocotools
-python -m pip install -e ./sam3
+uv pip install einops ninja pycocotools
+uv pip install -e ./sam3
 cd ..
 ```
 

@@ -1,3 +1,0 @@
-# Install both components.
--r pipeline/requirements.txt
--r benchmark/requirements.txt
