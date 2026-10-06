@@ -3,30 +3,42 @@
 <p align="center">
   <a href="https://onefigureeverycanvas.vercel.app/"><img src="https://img.shields.io/badge/Project-Page-green" alt="Project Page"></a>
   <a href="https://arxiv.org/abs/2610.06852"><img src="https://img.shields.io/badge/arXiv-2610.06852-b31b1b" alt="arXiv"></a>
+  <a href="https://drive.google.com/file/d/1WH9etIssytkrmkKSI1_mhNoTy9FEkRjk/view"><img src="https://img.shields.io/badge/Dataset-Google%20Drive-blue" alt="Dataset"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
 </p>
 
 <p align="center">
-  <a href="https://www.linkedin.com/in/%E5%A3%AB%E7%8F%8D-%E6%9B%BE-125166331/">Shih-Chen Tseng</a><sup>1,*</sup>,
-  <a href="https://www.linkedin.com/in/chchen825/">Chih-Hsuan Chen</a><sup>1,*</sup>,
-  <a href="https://www.linkedin.com/in/rhy01/">Ryan Yang</a><sup>2,*</sup>,
-  <a href="https://www.linkedin.com/in/annchen1234/">Hsi-An Chen</a><sup>1</sup>,
-  <a href="https://www.linkedin.com/in/ray-tuan-mu-a46257246/">Chun-Wei Tuan Mu</a><sup>1</sup>,
-  <a href="https://yulunalexliu.github.io/">Yu-Lun Liu</a><sup>1</sup>
+  <a href="https://www.linkedin.com/in/%E5%A3%AB%E7%8F%8D-%E6%9B%BE-125166331/"><strong>Shih-Chen Tseng</strong></a><sup>1,*</sup>,
+  <a href="https://www.linkedin.com/in/chchen825/"><strong>Chih-Hsuan Chen</strong></a><sup>1,*</sup>,
+  <a href="https://www.linkedin.com/in/rhy01/"><strong>Ryan Yang</strong></a><sup>2,*</sup>,
+  <a href="https://www.linkedin.com/in/annchen1234/"><strong>Hsi-An Chen</strong></a><sup>1</sup>,
+  <a href="https://www.linkedin.com/in/ray-tuan-mu-a46257246/"><strong>Chun-Wei Tuan Mu</strong></a><sup>1</sup>,
+  <a href="https://yulunalexliu.github.io/"><strong>Yu-Lun Liu</strong></a><sup>1,†</sup>
 </p>
 
 <p align="center">
-  <sup>1</sup> National Yang Ming Chiao Tung University<br>
-  <sup>2</sup> University of Illinois at Urbana-Champaign<br>
-  <sup>*</sup> Equal contribution
+  <sup>1</sup> National Yang Ming Chiao Tung University &nbsp; <sup>2</sup> University of Illinois at Urbana-Champaign<br>
+  <sub>* Equal contribution &nbsp; † Corresponding author</sub>
 </p>
 
-## Overview
+## Key Idea
 
-Pipeline figures in ML papers must be repurposed across many canvases, including paper columns, 16:9 slides, portrait posters, 1:1 social teasers, 9:16 phone previews. Each format imposes a different aspect ratio on the same computational graph, where any silently broken connection misrepresents the method. We formulate aspect-ratio-adaptive flowchart relayout as a distinct task: given a raster flowchart and a target ratio, produce a structurally faithful, hallucination-free, editable layout. Existing methods fail characteristically: image-to-image models stretch blocks and reject extreme ratios, text-to-image agentic systems hallucinate content, and parse-then-render systems mis-route edges. We propose an agentic pipeline factored into Parse, Style, and Layout stages, each pairing a main agent with a critic that combines deterministic constraint checks with VLM visual feedback so connectivity is explicitly checked and prevented from being silently broken. Outputs are draw.io-editable mxGraph XML. On a curated benchmark of 100 flowcharts at five aspect ratios, evaluated by Gemini 3.1 Pro and validated against human judgments, our method reaches 68.6% Content Fidelity versus 11.2-41.4% for prior work.
+Given a single raster flowchart and a target aspect ratio, we adapt the figure to a new canvas while preserving its content and connections. Our **Parse, Style, and Layout agents** each work with a critic to check structure, appearance, and layout. The output is **fully editable in draw.io**, making the same figure reusable across papers, slides, posters, and phone previews.
 
+## Outline
 
-## 📂 Repository Structure
+- [Repository Structure](#repository-structure)
+- [Quick Start](#quick-start)
+  - [Installation](#installation)
+  - [Pipeline](#pipeline)
+  - [Benchmark](#benchmark)
+- [Dataset](#dataset)
+- [Citation](#citation)
+- [License](#license)
+
+<a id="repository-structure"></a>
+
+## Repository Structure
 
 ```text
 .
@@ -46,7 +58,9 @@ Pipeline figures in ML papers must be repurposed across many canvases, including
 └── uv.lock
 ```
 
-## 🚀 Getting Started
+<a id="quick-start"></a>
+
+## Quick Start
 
 ### Installation
 
@@ -305,7 +319,58 @@ uv run python pipeline.py \
 - `--benchmarks`: one or more of `style`, `space`, `relationship`, and
   `hallucination`. If omitted, all four are run.
 
-## 📚 Citation
+## Dataset
+
+We release **FlowchartRelayoutBench**, containing 100 flowcharts collected from oral papers and relayout results from **our method and all evaluated baselines** at five target aspect ratios: **9:16, 2:3, 1:1, 3:2, and 16:9**. The dataset includes the original flowcharts and generated images, allowing researchers to run our benchmark and compare their own methods against the provided results.
+
+**[Download the dataset (Google Drive)](https://drive.google.com/file/d/1WH9etIssytkrmkKSI1_mhNoTy9FEkRjk/view)**
+
+### Dataset Structure
+
+```text
+flowchart-relayout-bench-dataset/
+└── cases/
+    ├── case_0001/
+    │   ├── source.png
+    │   └── relayouts/
+    │       ├── 1_1/
+    │       │   ├── autofigure_edit.png
+    │       │   ├── gpt_image_2.png
+    │       │   ├── nano_banana_pro.png
+    │       │   ├── ours.png
+    │       │   └── paperbanana.png
+    │       ├── 2_3/
+    │       ├── 3_2/
+    │       ├── 9_16/
+    │       └── 16_9/
+    ├── case_0002/
+    ├── ...
+    └── case_0100/
+```
+
+`source.png` is the original flowchart. Each folder under `relayouts/` stores the output images for one target aspect ratio; for example, `9_16` represents 9:16. Method filenames identify our result (`ours.png`) and each baseline.
+
+### Benchmark the Dataset
+
+To use the [benchmark pipeline](#benchmark), prepare a separate input folder for each case and target ratio. Copy the original `source.png` into that folder as `reference.png`, along with the method images from the corresponding `relayouts/<ratio>/` folder. Add your own method's image to the same folder to include it in the comparison.
+
+For example, prepare `case_0001` at 1:1 as:
+
+```text
+benchmark/inputs/case_0001_1_1/
+├── reference.png          # copied from case_0001/source.png
+├── autofigure_edit.png
+├── gpt_image_2.png
+├── nano_banana_pro.png
+├── ours.png
+└── paperbanana.png
+```
+
+Repeat for the cases and ratios you want to evaluate, then follow the [benchmark command](#benchmark). The released dataset structure must be converted to this input format before running the benchmark.
+
+<a id="citation"></a>
+
+## Citation
 
 If you find our work useful, please consider citing:
 
@@ -317,5 +382,7 @@ If you find our work useful, please consider citing:
 }
 ```
 
-## 📄 License
+<a id="license"></a>
+
+## License
 This project is licensed under the [MIT License](LICENSE).
