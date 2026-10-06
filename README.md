@@ -247,6 +247,25 @@ uv run python pipeline.py \
 or `1:1`. If it is omitted, the layout preserves the original canvas size and
 aspect ratio obtained from the input image.
 
+#### Iterations
+
+`--parse_iterations`, `--style_iterations`, and `--layout_iterations` set
+the **maximum iterations** per stage (default: **1** each). Stages may stop
+early when the critic accepts the result.
+
+Our paper uses **Parse: 3, Style: 2, Layout: 5**. From `pipeline/`:
+
+```bash
+uv run python pipeline.py \
+  --input_dir inputs/<case_name> \
+  --output_dir outputs/ \
+  --image_name <image_name> \
+  --aspect_ratio 16:9 \
+  --parse_iterations 3 \
+  --style_iterations 2 \
+  --layout_iterations 5
+```
+
 ### Benchmark
 
 The benchmark evaluates reference images and candidate flowchart images.
