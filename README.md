@@ -1,8 +1,29 @@
-# One Figure, Every Canvas
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Python 3.12](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
+<h1 align="center">One Figure, Every Canvas: Editable Flowchart Relayout via Agentic Pipeline</h1>
 
-## 📌 Description
+<p align="center">
+  <a href="https://onefigureeverycanvas.vercel.app/"><img src="https://img.shields.io/badge/Project-Page-green" alt="Project Page"></a>
+  <a href="https://arxiv.org/abs/2610.06852"><img src="https://img.shields.io/badge/arXiv-2610.06852-b31b1b" alt="arXiv"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
+</p>
+
+<p align="center">
+  <a href="https://www.linkedin.com/in/%E5%A3%AB%E7%8F%8D-%E6%9B%BE-125166331/">Shih-Chen Tseng</a><sup>1,*</sup>,
+  <a href="https://www.linkedin.com/in/chchen825/">Chih-Hsuan Chen</a><sup>1,*</sup>,
+  <a href="https://www.linkedin.com/in/rhy01/">Ryan Yang</a><sup>2,*</sup>,
+  <a href="https://www.linkedin.com/in/annchen1234/">Hsi-An Chen</a><sup>1</sup>,
+  <a href="https://www.linkedin.com/in/ray-tuan-mu-a46257246/">Chun-Wei Tuan Mu</a><sup>1</sup>,
+  <a href="https://yulunalexliu.github.io/">Yu-Lun Liu</a><sup>1</sup>
+</p>
+
+<p align="center">
+  <sup>1</sup> National Yang Ming Chiao Tung University<br>
+  <sup>2</sup> University of Illinois at Urbana-Champaign<br>
+  <sup>*</sup> Equal contribution
+</p>
+
+## Overview
+
+Pipeline figures in ML papers must be repurposed across many canvases, including paper columns, 16:9 slides, portrait posters, 1:1 social teasers, 9:16 phone previews. Each format imposes a different aspect ratio on the same computational graph, where any silently broken connection misrepresents the method. We formulate aspect-ratio-adaptive flowchart relayout as a distinct task: given a raster flowchart and a target ratio, produce a structurally faithful, hallucination-free, editable layout. Existing methods fail characteristically: image-to-image models stretch blocks and reject extreme ratios, text-to-image agentic systems hallucinate content, and parse-then-render systems mis-route edges. We propose an agentic pipeline factored into Parse, Style, and Layout stages, each pairing a main agent with a critic that combines deterministic constraint checks with VLM visual feedback so connectivity is explicitly checked and prevented from being silently broken. Outputs are draw.io-editable mxGraph XML. On a curated benchmark of 100 flowcharts at five aspect ratios, evaluated by Gemini 3.1 Pro and validated against human judgments, our method reaches 68.6% Content Fidelity versus 11.2-41.4% for prior work.
 
 
 ## 📂 Repository Structure
@@ -283,9 +304,6 @@ uv run python pipeline.py \
 - `--name`: run directory name; defaults to the current timestamp.
 - `--benchmarks`: one or more of `style`, `space`, `relationship`, and
   `hallucination`. If omitted, all four are run.
-
-## 📊 Results
-
 
 ## 📚 Citation
 
