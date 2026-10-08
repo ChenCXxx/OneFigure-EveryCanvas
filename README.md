@@ -1,11 +1,44 @@
-# One Figure, Every Canvas
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Python 3.12](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
+<h1 align="center">One Figure, Every Canvas: Editable Flowchart Relayout via Agentic Pipeline</h1>
 
-## 📌 Description
+<p align="center">
+  <a href="https://onefigureeverycanvas.vercel.app/"><img src="https://img.shields.io/badge/Project-Page-green" alt="Project Page"></a>
+  <a href="https://arxiv.org/abs/2610.06852"><img src="https://img.shields.io/badge/arXiv-2610.06852-b31b1b" alt="arXiv"></a>
+  <a href="https://drive.google.com/file/d/1WH9etIssytkrmkKSI1_mhNoTy9FEkRjk/view"><img src="https://img.shields.io/badge/Dataset-Google%20Drive-blue" alt="Dataset"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
+</p>
 
+<p align="center">
+  <a href="https://www.linkedin.com/in/%E5%A3%AB%E7%8F%8D-%E6%9B%BE-125166331/"><strong>Shih-Chen Tseng</strong></a><sup>1,*</sup>,
+  <a href="https://www.linkedin.com/in/chchen825/"><strong>Chih-Hsuan Chen</strong></a><sup>1,*</sup>,
+  <a href="https://www.linkedin.com/in/rhy01/"><strong>Ryan Yang</strong></a><sup>2,*</sup>,
+  <a href="https://www.linkedin.com/in/annchen1234/"><strong>Hsi-An Chen</strong></a><sup>1</sup>,
+  <a href="https://www.linkedin.com/in/ray-tuan-mu-a46257246/"><strong>Chun-Wei Tuan Mu</strong></a><sup>1</sup>,
+  <a href="https://yulunalexliu.github.io/"><strong>Yu-Lun Liu</strong></a><sup>1,†</sup>
+</p>
 
-## 📂 Repository Structure
+<p align="center">
+  <sup>1</sup> National Yang Ming Chiao Tung University &nbsp; <sup>2</sup> University of Illinois at Urbana-Champaign<br>
+  <sub>* Equal contribution &nbsp; † Corresponding author</sub>
+</p>
+
+## Key Idea
+
+Given a single raster flowchart and a target aspect ratio, we adapt the figure to a new canvas while preserving its content and connections. Our **Parse, Style, and Layout agents** each work with a critic to check structure, appearance, and layout. The output is **fully editable in draw.io**, making the same figure reusable across papers, slides, posters, and phone previews.
+
+## Outline
+
+- [Repository Structure](#repository-structure)
+- [Quick Start](#quick-start)
+  - [Installation](#installation)
+  - [Pipeline](#pipeline)
+  - [Benchmark](#benchmark)
+- [Dataset](#dataset)
+- [Citation](#citation)
+- [License](#license)
+
+<a id="repository-structure"></a>
+
+## Repository Structure
 
 ```text
 .
@@ -24,7 +57,9 @@
 └── uv.lock
 ```
 
-## 🚀 Getting Started
+<a id="quick-start"></a>
+
+## Quick Start
 
 ### Installation
 
@@ -203,6 +238,25 @@ uv run python pipeline.py \
 or `1:1`. If it is omitted, the layout preserves the original canvas size and
 aspect ratio obtained from the input image.
 
+#### Iterations
+
+`--parse_iterations`, `--style_iterations`, and `--layout_iterations` set
+the **maximum iterations** per stage (default: **1** each). Stages may stop
+early when the critic accepts the result.
+
+Our paper uses **Parse: 3, Style: 2, Layout: 5**. From `pipeline/`:
+
+```bash
+uv run python pipeline.py \
+  --input_dir inputs/<case_name> \
+  --output_dir outputs/ \
+  --image_name <image_name> \
+  --aspect_ratio 16:9 \
+  --parse_iterations 3 \
+  --style_iterations 2 \
+  --layout_iterations 5
+```
+
 ### Benchmark
 
 The benchmark evaluates reference images and candidate flowchart images.
@@ -275,10 +329,58 @@ uv run python pipeline.py \
 - `--benchmarks`: one or more of `style`, `space`, `relationship`, and
   `hallucination`. If omitted, all four are run.
 
-## 📊 Results
+## Dataset
 
+We release **FlowchartRelayoutBench**, containing 100 flowcharts collected from oral papers and relayout results from **our method and all evaluated baselines** at five target aspect ratios: **9:16, 2:3, 1:1, 3:2, and 16:9**. The dataset includes the original flowcharts and generated images, allowing researchers to run our benchmark and compare their own methods against the provided results.
 
-## 📚 Citation
+**[Download the dataset (Google Drive)](https://drive.google.com/file/d/1WH9etIssytkrmkKSI1_mhNoTy9FEkRjk/view)**
+
+### Dataset Structure
+
+```text
+flowchart-relayout-bench-dataset/
+└── cases/
+    ├── case_0001/
+    │   ├── source.png
+    │   └── relayouts/
+    │       ├── 1_1/
+    │       │   ├── autofigure_edit.png
+    │       │   ├── gpt_image_2.png
+    │       │   ├── nano_banana_pro.png
+    │       │   ├── ours.png
+    │       │   └── paperbanana.png
+    │       ├── 2_3/
+    │       ├── 3_2/
+    │       ├── 9_16/
+    │       └── 16_9/
+    ├── case_0002/
+    ├── ...
+    └── case_0100/
+```
+
+`source.png` is the original flowchart. Each folder under `relayouts/` stores the output images for one target aspect ratio; for example, `9_16` represents 9:16. Method filenames identify our result (`ours.png`) and each baseline.
+
+### Benchmark the Dataset
+
+To use the [benchmark pipeline](#benchmark), prepare a separate input folder for each case and target ratio. Copy the original `source.png` into that folder as `reference.png`, along with the method images from the corresponding `relayouts/<ratio>/` folder. Add your own method's image to the same folder to include it in the comparison.
+
+For example, prepare `case_0001` at 1:1 as:
+
+```text
+benchmark/inputs/case_0001_1_1/
+├── reference.png          # copied from case_0001/source.png
+├── autofigure_edit.png
+├── gpt_image_2.png
+├── nano_banana_pro.png
+├── ours.png
+└── paperbanana.png
+```
+
+Repeat for the cases and ratios you want to evaluate, then follow the [benchmark command](#benchmark). The released dataset structure must be converted to this input format before running the benchmark.
+
+<a id="citation"></a>
+
+## Citation
 
 If you find our work useful, please consider citing:
 
@@ -290,5 +392,7 @@ If you find our work useful, please consider citing:
 }
 ```
 
-## 📄 License
+<a id="license"></a>
+
+## License
 This project is licensed under the [MIT License](LICENSE).

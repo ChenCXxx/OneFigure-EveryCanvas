@@ -131,7 +131,7 @@ class LLMClient:
                 {"role": "user", "content": content},
             ],
             temperature=self.settings.temperature,
-            max_tokens=self.settings.max_output_tokens,
+            max_completion_tokens=self.settings.max_output_tokens,
             timeout=self.settings.timeout_seconds,
         )
         text = response.choices[0].message.content

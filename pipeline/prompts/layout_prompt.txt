@@ -1,7 +1,7 @@
-﻿請依照規則輸出排版後的 mxGraphModel XML，並重新計算/調整連線箭頭。
-以下是完整原始 XML（請保留 style/value/edge 等屬性，只更新幾何與箭頭路徑）：
+﻿Output the rearranged mxGraphModel XML according to the rules, and recalculate/adjust the connection arrows.
+Below is the complete original XML (preserve attributes such as style/value/edge, and only update geometry and arrow paths):
 {xml_text}
 
-以下是解析後的布局輸入（JSON，僅供參考）：
+Below is the parsed layout input (JSON, for reference only):
 {layout_input}
 {feedback}
